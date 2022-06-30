@@ -1,0 +1,53 @@
+<template>
+  <div v-if="$vuetify.breakpoint.mdOnly || $vuetify.breakpoint.lgOnly || $vuetify.breakpoint.xlOnly" >
+    <v-footer
+        absolute
+        color="#393B44">
+      <v-row
+          align="center"
+          justify="center"
+          class="ma-2"
+      >
+        <v-col
+            cols="6"
+            md="6"
+            align="center"
+        ><v-img
+            width="300"
+            height="60"
+            class="hidden-xs-only"
+            src="/img/logo-corrientes-blanco.svg"
+        ></v-img>
+          <v-img
+              width="150"
+              class="hidden-sm-and-up"
+              src="/img/logo-corrientes-blanco.svg"
+          ></v-img>
+        </v-col>
+        <v-col
+            cols="6"
+            md="6"
+            align="center"
+        >
+          <v-img
+              width="300"
+              height="60"
+              class="hidden-xs-only"
+              src="/img/logo-susti-blanco.svg"
+          ></v-img>
+          <v-img
+              width="140"
+              class="hidden-sm-and-up"
+              src="/img/logo-susti-blanco.svg"
+          ></v-img>
+        </v-col>
+      </v-row>
+    </v-footer>
+  </div>
+</template>
+
+<script>
+export default {
+  name: "Footer"
+}
+</script>
