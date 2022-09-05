@@ -42,8 +42,8 @@ class ExpedienteController extends Controller
         $prioridad = PrioridadExpediente::all();
         $fecha = Carbon::now()->format('d-m-Y');
         $areas = Area::all_areas();
-        $create_exp = [$fecha, $iniciador, $motivoAll, $motivo, $prioridad,$areas];
-        return response()->json($create_exp,200);
+        $create_exp = [$fecha, $iniciador, $motivoAll, $motivo, $prioridad, $areas];
+        return response()->json($create_exp, 200);
     }
 
     public function createNroExpediente()
@@ -69,7 +69,6 @@ class ExpedienteController extends Controller
 
     /*
     Método Store replanteado con transactions para evitar inconsistencias en la DB
-    M.F.
     */
     public function store(StoreExpedienteRequest $request)
     {
@@ -81,12 +80,13 @@ class ExpedienteController extends Controller
             $expediente->nro_expediente = $nro_expediente;
             $expediente->nro_expediente_ext = $request->nro_expediente_ext;
             $expediente->fojas = $request->nro_fojas;
+            $expediente->fojas_aux = $request->nro_fojas;
             $expediente->fecha = Carbon::now()->format('Y-m-d');
             $expediente->prioridad_id = $request->prioridad_id;
             $expediente->tipo_expediente = $request->tipo_exp_id;
             $expediente->estado_expediente_id = '1';
             $expediente->area_actual_id = '13';
-            $expediente->monto = $request->monto;
+            //$expediente->monto = $request->monto;
             $expediente->save();
 
             $extracto = new Extracto;
@@ -108,7 +108,7 @@ class ExpedienteController extends Controller
             $historial->area_destino_id = 13;
             $historial->fojas = $request->nro_fojas;
             $historial->fecha = Carbon::now()->format('Y-m-d');
-            $historial->hora = Carbon::now()->format('h:i');
+            $historial->hora = Carbon::now();
             $historial->motivo = "Expediente creado.";
             $historial->estado = 1;
             if(($request->allFiles()) != null)
@@ -130,11 +130,11 @@ class ExpedienteController extends Controller
             $historial->area_destino_id = $request->area_id;
             $historial->fojas = 0;
             $historial->fecha = Carbon::now()->format('Y-m-d');
-            $historial->hora = Carbon::now()->format('h:i');
+            $historial->hora = Carbon::now();
             //$historial->motivo = $request->observacion; TODO
             $historial->motivo = "Pase al área: ".Area::find( $historial->area_destino_id)->descripcion. ".";
             $historial->observacion = null;
-            $historial->estado = "1";//Enviado
+            $historial->estado = 1;//Enviado
             $nano = time_nanosleep(0, 500000000);
             $historial->save();
             $estado_actual = Area::findOrFail($request->area_id);

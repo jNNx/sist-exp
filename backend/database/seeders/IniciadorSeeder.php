@@ -70,7 +70,7 @@ class IniciadorSeeder extends Seeder
         foreach($this->arrayIniciadores as $iniciador){
             $i = new Iniciador();
             $i->nombre = $iniciador['nombre'];
-            $i->id_tipo_entidad = $iniciador['tipo_entidad_id'];
+            $i->tipo_entidad_id = $iniciador['tipo_entidad_id'];
             if ($iniciador['cuit'] != null){
                 $i->cuit = $iniciador['cuit'];
             }

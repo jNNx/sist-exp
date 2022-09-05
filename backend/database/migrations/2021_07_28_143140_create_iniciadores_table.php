@@ -16,7 +16,7 @@ class CreateIniciadoresTable extends Migration
         Schema::create('iniciadores', function (Blueprint $table) 
         {
             $table->bigIncrements('id');
-            $table->foreignId('id_tipo_entidad')->constrained('tipos_entidad'); //TODO 
+            $table->foreignId('tipo_entidad_id')->constrained('tipos_entidad'); //TODO 
             $table->string('nombre');
             $table->string('apellido')->nullable();
             $table->unsignedBigInteger('dni')->nullable();

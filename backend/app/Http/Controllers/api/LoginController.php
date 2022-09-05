@@ -48,7 +48,7 @@ class LoginController extends Controller
 
     public function showLoginForm()
     {
-        return "Vista Login.";
+        //
     }
 
     public function logout()
@@ -62,7 +62,6 @@ class LoginController extends Controller
      * Método para autenticar un usuario y loquearlo en el sistema,
      * genera un token para utilizar la API
      * @param: cuil
-     * Autor: Mariano Flores
      */
     public function authenticate(LoginRequest $request)
     {
@@ -74,6 +73,18 @@ class LoginController extends Controller
             if(Hash::check($request->password, $user->password))
             {
                 $token = $user->createToken('token')->plainTextToken;
+                if($user->area_id == 13)
+                {
+                    $user->givePermissionTo('CREAR EXPEDIENTE', 'UNIR EXPEDIENTES');
+                        if($user->id == 36)
+                        {
+                            $user->givePermissionTo('AGREGAR INICIADOR');
+                        }
+                }
+                else if($user->area_id == 15)
+                {
+                    $user->givePermissionTo('AGREGAR INICIADOR');
+                }
                 return response()->json([
                     "status" => true,
                     "mensaje" => "usuario logueado exitosamente",
@@ -100,6 +111,6 @@ class LoginController extends Controller
                 "status" => false,
                 "mensaje" => "usuario y/o contraseña incorrecta",
             ], 404);
-        }               
+        }
     }
 }

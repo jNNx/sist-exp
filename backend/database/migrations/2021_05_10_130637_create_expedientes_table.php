@@ -19,12 +19,13 @@ class CreateExpedientesTable extends Migration
             $table->foreignId('estado_expediente_id')->constrained('estado_expedientes');
             $table->foreignId('tipo_expediente')->constrained('tipo_expedientes');
             $table->foreignId('prioridad_id')->constrained('prioridad_expedientes');
-            $table->string('expediente_id')->nullable();
+            //$table->string('expediente_id')->nullable();
             $table->string('nro_expediente')->unique();
             $table->string('nro_expediente_ext')->nullable();
             $table->unsignedInteger('fojas');
+            $table->unsignedInteger('fojas_aux');
             $table->date('fecha');
-            $table->double('monto',10,2)->nullable();
+            //$table->double('monto',10,2)->nullable();
             $table->string('archivos')->nullable();
             $table->timestamps();
             $table->softDeletes();

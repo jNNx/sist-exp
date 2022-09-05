@@ -18,12 +18,10 @@ class CreateUsersTable extends Migration
             //$table->unsignedBigInteger('persona_id');//->constrained('personas');
             $table->foreignId('persona_id')->constrained('personas');
             $table->foreignId('area_id')->constrained('areas');
-            //$table->unsignedBigInt('area_id');
             $table->foreignId('tipo_user_id')->constrained('tipo_users');
-            //$table->unsignedBigInteger('area_id');
             $table->unsignedBigInteger('cuil')->unique();
             $table->string('password')->nullable();
-            $table->timestamp('email_verified_at')->nullable();
+            //$table->timestamp('email_verified_at')->nullable();
             $table->rememberToken();
             $table->timestamps();
             $table->softDeletes();

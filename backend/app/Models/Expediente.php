@@ -2,7 +2,7 @@
 
 namespace App\Models;
 
-use App\Models\Cedula;
+//use App\Models\Cedula;
 use App\Models\Caratula;
 use App\Models\Historial;
 use App\Models\Iniciador;
@@ -37,10 +37,10 @@ class Expediente extends Model
         //$this->hasOne(Phone::class, 'foreign_key', 'local_key');
     }
 
-    public function pagos()
+/*    public function pagos()
     {
         return $this->hasMany(Pago::class);
-    }
+    }*/
 
     public function area()
     {
@@ -68,10 +68,10 @@ class Expediente extends Model
         return ceil($this->fojas/200);
     }
 
-    public function cedulas()
+/*    public function cedulas()
     {
         return $this->hasMany(Cedula::class);
-    }
+    }*/
 
     CONST EXTENSIONES_PERMITIDAS = [
         'docx',
@@ -95,7 +95,7 @@ class Expediente extends Model
         return $sum;
     }
 
-    public static function detalle_cedulas($expediente_id)
+/*    public static function detalle_cedulas($expediente_id)
     {
         $expediente = Expediente::find($expediente_id);
         $cedulas = Cedula::all()->where('expediente_id', $expediente_id);
@@ -112,7 +112,7 @@ class Expediente extends Model
             ]);
         }
         return $array;
-    }
+    }*/
 
     /*
     * Retorna una colleccion con los datos del expediente
@@ -131,7 +131,7 @@ class Expediente extends Model
                           "cuil"            => $this->caratula->iniciador->cuil,
                           "extracto"        => $this->caratula->extracto->descripcion,
                           "area_actual"     => $this->area->descripcion,
-                          "cantidad_cedulas"=> $this->cedulas->count()
+                          //"cantidad_cedulas"=> $this->cedulas->count()
                         ]);
         return $array;
     }
@@ -156,10 +156,8 @@ class Expediente extends Model
         return $array;
     }
 
-    /**
-     * Método que devuelve todos los expedientes
-     * Autor: Mariano Flores
-     */
+     // Método que devuelve todos los expedientes
+
     public static function datosExpediente()
     {
         $area_origen = DB::table('historiales')
@@ -174,6 +172,7 @@ class Expediente extends Model
                                  'extractos.descripcion as extracto',
                                  'expedientes.fecha as fecha_creacion',
                                  'tipo_expedientes.descripcion as tramite',
+                                 'expedientes.estado_expediente_id as estado_expediente',
                                  DB::raw('ceil(expedientes.fojas / 200) as cuerpos'),
                                  'caratulas.id as caratula',
                                  'expedientes.fojas',
@@ -181,7 +180,6 @@ class Expediente extends Model
                                  'areaOrigen.descripcion as area_origen',
                                  'expedientes.archivos as archivo'
                                  )
-                        ->where('expedientes.expediente_id', '=', null)
                         ->joinSub($area_origen, 'areaOrigen', function($join)
                         {
                             $join->on('expedientes.id', '=', 'areaOrigen.expediente_id');
@@ -189,6 +187,7 @@ class Expediente extends Model
                         ->join('prioridad_expedientes', 'prioridad_expedientes.id', '=', 'expedientes.prioridad_id')
                         ->join('caratulas', 'expedientes.id', '=', 'caratulas.expediente_id')
                         ->join('extractos', 'caratulas.extracto_id', '=', 'extractos.id')
+                        ->join('estado_expedientes', 'estado_expedientes.id', '=', 'expedientes.estado_expediente_id')
                         ->join('tipo_expedientes', 'expedientes.tipo_expediente', '=', 'tipo_expedientes.id')
                         ->join('areas', 'areas.id', '=', 'expedientes.area_actual_id')
                         ->orderBy('expedientes.id')
@@ -196,14 +195,9 @@ class Expediente extends Model
         return $query;
     }
 
-    /**
-     * Método index replanteado utilizando Query Builder
-     * Autor: Mariano Flores
-     */
     public static function index()
     {
         $expediente = DB::table('expedientes')
-                        ->where('expedientes.expediente_id', '=', null)
                         ->join('prioridad_expedientes', 'prioridad_expedientes.id', '=', 'expedientes.prioridad_id')
                         ->join('caratulas', 'caratulas.expediente_id', '=', 'expedientes.id')
                         ->join('extractos', 'extractos.id', '=', 'caratulas.extracto_id')
@@ -246,7 +240,6 @@ class Expediente extends Model
      * Método que devuelve el listado de expedientes según bandeja seleccionada y área del usuario logueado
      * @param: id usuario
      * @param: id bandeja
-     * Autor: Mariano Flores
      */
     public static function listadoExpedientes($user_id, $bandeja)
     {
@@ -264,18 +257,10 @@ class Expediente extends Model
         $areas_d = DB::table('areas')
                         ->select('id as area_id_destino', 'descripcion as area_descripcion_destino');
 
-        //devuelve los expedientes que son padres
-        $exp_padres = DB::table('expedientes')
-            ->join('expedientes as exp','exp.expediente_id','expedientes.id')
-            ->select('exp.expediente_id')
-            ->groupBy('exp.expediente_id');
-            //->get('exp.expediente_id');
-
-    
+   
         //recupera el registro completo del historial del último movimiento del expediente
         $historial_ultimo_movimiento = DB::table('historiales')
                         ->select('expedientes.id as expediente_id',
-                                'expedientes.expediente_id as expediente_padre',
                                  'prioridad_expedientes.descripcion as prioridad',
                                  'expedientes.nro_expediente as nro_expediente',
                                  'extractos.descripcion as extracto',
@@ -296,8 +281,7 @@ class Expediente extends Model
                                  'historiales.observacion as observacion_pase',
                                  'historiales.hora as hora',
                                  'historiales.fecha as fecha',
-                                 DB::raw("CONCAT(personas.nombre, ' ', personas.apellido) as nombre_apellido"),
-                                 'padres.expediente_id as hijos'
+                                 DB::raw("CONCAT(personas.nombre, ' ', personas.apellido) as nombre_apellido")
                                  )
                         ->joinSub($id_ultimos_movimientos, 'ultimo_movimiento_expediente', function($join)
                         {
@@ -311,10 +295,6 @@ class Expediente extends Model
                         {
                             $join->on('historiales.area_destino_id', "=", 'areasDeDestino.area_id_destino');
                         })
-                        ->LeftJoinSub($exp_padres, 'padres', function($join)
-                        {
-                            $join->on('historiales.expediente_id', "=", 'padres.expediente_id');
-                        })
                         ->join('expedientes', 'historiales.expediente_id', '=', 'expedientes.id')
                         ->join('prioridad_expedientes', 'expedientes.prioridad_id', '=', 'prioridad_expedientes.id')
                         ->join('caratulas', 'expedientes.id', '=', 'caratulas.expediente_id')
@@ -322,8 +302,7 @@ class Expediente extends Model
                         ->join('tipo_expedientes', 'expedientes.tipo_expediente', '=', 'tipo_expedientes.id')
                         ->join('iniciadores', 'caratulas.iniciador_id', '=', 'iniciadores.id')
                         ->join('users', 'historiales.user_id', '=', 'users.id')
-                        ->join('personas', 'users.persona_id', '=', 'personas.id')
-                        ->whereNull('expedientes.expediente_id'); //solo expedientes padres
+                        ->join('personas', 'users.persona_id', '=', 'personas.id');
 
                         if ($bandeja == 1) {
                             return $historial_ultimo_movimiento ->where('area_destino_id', $user->area_id)
@@ -381,7 +360,6 @@ class Expediente extends Model
     /**
      * Método que devuelve la cantidad de expedientes pendientes por aceptar según el área del usuario logueado
      * @param: id usuario
-     * Autor: Mariano Flores
      */
     public static function contadorBandejaEntrada($user_id)
     {
@@ -413,16 +391,6 @@ class Expediente extends Model
         {
             case "1": //Busca por nro_expediente
                 $expediente = Expediente::where('nro_expediente', $valor)->get()->first();//Deberia retornar solo un expediente
-                if ($expediente->expediente_id == null)
-                {
-                    $lista_expedientes->push($expediente->getDatos());
-                }
-                else
-                {
-                    $exp_padre = $expediente->padre()->first()->getDatos();
-                    $exp_hijos = $expediente->getDatos();
-                    $lista_expedientes->push($exp_padre, $exp_hijos, $bandera=1);
-                }
                 break;
 
             case "2": //Busca por cuit iniciador
@@ -439,7 +407,6 @@ class Expediente extends Model
 
                     $expedientes = DB::table('caratulas')
                                      ->where('caratulas.iniciador_id',$iniciador_id)
-                                     ->where('expedientes.expediente_id','=',null)
                                      ->join('expedientes','expedientes.id','caratulas.expediente_id')
                                      ->join('iniciadores','iniciadores.id','caratulas.iniciador_id')
                                      ->join('extractos','extractos.id','caratulas.extracto_id')
@@ -448,7 +415,6 @@ class Expediente extends Model
                                      ->orderBy('expedientes.created_at', 'DESC')
                                      ->get([
                                          'expedientes.id as id',
-                                         'expedientes.expediente_id as expediente_hijo_id',
                                          'expedientes.nro_expediente as nro_expediente',
                                          DB::raw("DATE_FORMAT(expedientes.created_at, '%d-%m-%y %h:%i:%s') as fecha"),
                                          //DB::raw("CONCAT(iniciadores.nombre,', ',iniciadores.apellido) as iniciadores"),
@@ -476,13 +442,13 @@ class Expediente extends Model
                    // return response()->json($expedientes->toArray(), 200);
                 }
                 break;
-            case "3"://Busca por nro_cheque o nro_transaccion
+                /*case "3"://Busca por nro_cheque o nro_transaccion
                 $pago = Pago::where('nro', $valor)->get()->first();//Deberia retornar solo un expediente
                 if ($pago != null)
                 {
                     $lista_expedientes->push($pago->expediente->getDatos());
                 }
-                break;
+                break;*/
             case "4"://Busca por id de iniciador
                 $iniciador = Iniciador::findOrFail($valor);
                 //Recorro las caratulas del iniciador para obtener los expedientes
@@ -519,11 +485,11 @@ class Expediente extends Model
                     }
                     break;
 
-                    case "7": //Busca por numero de Cedula
+                    /*case "7": //Busca por numero de Cedula
                         $ced = Cedula::where('descripcion',$valor)->first();
                         $exp = Expediente::FindOrFail($ced->expediente_id);
                         $lista_expedientes->push($exp->getDatos());
-                        break;
+                        break;*/
 
         }
         return $lista_expedientes;
