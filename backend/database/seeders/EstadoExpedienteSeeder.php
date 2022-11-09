@@ -16,11 +16,10 @@ class EstadoExpedienteSeeder extends Seeder
     {
         $estados = [
             'Pendiente',
-            '',
             'Aceptado',
             'Enviado',
+            'Eliminado',
             'Recuperado',
-            'Expediente SIIF'
         ];
         foreach($estados as $pri){
             $p = new EstadoExpediente();

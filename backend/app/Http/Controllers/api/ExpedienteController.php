@@ -648,20 +648,8 @@ class ExpedienteController extends Controller
         return response()->json($datos, 200);
     }
 
-    public function pruebaNormal(Request $request)
+    public function indexMotivos()
     {
-        $user = $request->user();
-        return response()->json($user, 200);
-    }
-
-    public function pruebaEnglose(Request $request)
-    {
-        $user = $request->user();
-        return response()->json($user, 200);
-    }
-
-
-    public function indexMotivos(){
         $motivoAll = TipoExpediente::all();
         $areasAll = Area::all_areas();
         return response()->json([$motivoAll, $areasAll], 200);

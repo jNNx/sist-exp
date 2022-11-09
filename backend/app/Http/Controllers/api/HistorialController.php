@@ -112,7 +112,7 @@ class HistorialController extends Controller
     */
     public function updateEstado(Request $request)
     {
-        # 1-Pendiente, 3-Aceptado, 4-Enviado 5-Recuperado
+        # 1-Pendiente, 2-Aceptado, 3-Enviado, 4-Eliminado, 5-Recuperado
         $user = Auth::user();
         $expediente = Expediente::findOrFail($request->expediente_id);
 
@@ -128,15 +128,21 @@ class HistorialController extends Controller
         $historial->estado = $request->estado_expediente;
         $expediente->estado_expediente_id = $request->estado_expediente;
 
-        // Si el estado al que cambia es 3 (mis expediente), Actualizo el area actual del expediente.
+        // Si el estado al que cambia es 2 (mis expediente), Actualizo el area actual del expediente.
         switch($request->estado_expediente)
         {
-            case "3":
+            case "2":
                 $expediente->area_actual_id = $user->area_id;
                 $expediente->fojas_aux = $expediente->fojas;
                 $historial->motivo = "Pase aceptado";
                 $expediente->update();
                 break;
+            case "4":
+                $expediente->area_actual_id = $user->area_id;
+                $expediente->fojas_aux = $expediente->fojas;
+                $expediente->estado_expediente = 4;
+                $historial->motivo = "Expediente eliminado";
+                $expediente->update();
             case "5":
                 $historial->motivo = "Pase recuperado";
                 $historial->estado = 5;
