@@ -256,7 +256,7 @@ class HistorialController extends Controller
                              DB::raw("CONCAT(personas.nombre,', ',personas.apellido) as nombre_usuario"),
                              DB::raw("DATE_FORMAT(historiales.created_at, '%d-%m-%y %h:%i:%s') as fecha"),
                              'historiales.motivo as motivo',
-                             DB::raw("DATE_FORMAT(historiales.created_at, '%h:%i:%s') as hora"),
+                             DB::raw("DATE_FORMAT(historiales.created_at, '%h:%i:%s %p') as hora"),
                             ]);
 
         return response()->json($historiales, 200);
@@ -279,7 +279,6 @@ class HistorialController extends Controller
     /**
      * Método que retorna los expedientes enviados por toda un área, o un usuario específico
      * @param: all [boolean] / True "todos los enviados del área / "False" solo los enviados del usuario logueado
-     * @autor: Mariano Flores
      */
     public function misEnviados(Request $request)
     {
