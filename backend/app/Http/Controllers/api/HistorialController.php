@@ -25,10 +25,10 @@ class HistorialController extends Controller
         $area_destino_mesa_archivos = $area_destino->except(['26']);
         $fecha = Carbon::now()->format('d-m-Y');
         $hora = Carbon::now()->format('h:i');
-        $horario = [$fecha,$hora];
+        $horario = [$fecha, $hora];
         //$user = User::findOrFail($c["user_id"]);
         //$agente = [$user->persona->nombre, $user->persona->apellido, $user->id];
-        $historial = [$expediente, $area_destino, $horario,$area_destino_mesa_archivos];
+        $historial = [$expediente, $area_destino, $horario, $area_destino_mesa_archivos];
         return response()->json($historial, 200);
     }
 
@@ -64,8 +64,9 @@ class HistorialController extends Controller
             $historial->motivo = "Pase al area: " . Area::find($request->area_destino_id)->descripcion . ".";
             //$historial->nombre_archivo = $request->nombre_archivo;
             $historial->estado = 1;//pendiente para la bandeja del area destino, enviado para la bandeja origen
-            $expediente->estado_expediente_id = '1';
+            $expediente->estado_expediente_id = 1;
             $expediente->fojas += $historial->fojas;
+            $expediente->fojas_aux = $expediente->fojas_aux;
             //ARCHIVOS/////////////////////////////////////////////////////////////////////////////
             if(($request->allFiles()) != null)
             {
@@ -123,35 +124,55 @@ class HistorialController extends Controller
         $historial->fojas = $expediente->fojas;
         $historial->fecha = Carbon::now()->format('Y-m-d');
         $historial->hora = Carbon::now()->format('h:i');
-        $historial->motivo = "Pase aceptado";
+        //$historial->motivo = "Pase aceptado";
         $historial->estado = $request->estado_expediente;
         $expediente->estado_expediente_id = $request->estado_expediente;
+
+        // Si el estado al que cambia es 3 (mis expediente), Actualizo el area actual del expediente.
+        switch($request->estado_expediente)
+        {
+            case "3":
+                $expediente->area_actual_id = $user->area_id;
+                $expediente->fojas_aux = $expediente->fojas;
+                $historial->motivo = "Pase aceptado";
+                $expediente->update();
+                break;
+            case "5":
+                $historial->motivo = "Pase recuperado";
+                $historial->estado = 5;
+                $historial->fojas = $expediente->fojas_aux;
+                $expediente->estado_expediente_id = 5;
+                $expediente->fojas = $expediente->fojas_aux;
+                $expediente->update();
+                break;
+        }
         /*
-        * Si el estado al que cambia es 3 (mis expediente), Actualizo el area actual del expediente.
-        */
         if ($request->estado_expediente == 3 or $request->estado_expediente == 5) {
             $expediente->area_actual_id = $user->area_id;
+            $expediente->fojas_aux = $expediente->fojas;
             $expediente->update();
             if ($request->estado_expediente == 5)
             {
                 $historial->motivo = "Pase recuperado";
                 $historial->estado = 5;
+                $historial->fojas = $expediente->fojas_aux;
                 $expediente->estado_expediente_id = 5;
+                $expediente->fojas = $expediente->fojas_aux;
                 $expediente->save();
             }
         }
         else
         {
             $expediente->update();
-        }
+        }*/
 
         $historial->save();
 
-        $estado = $request->estado;//parametro
+        //$estado = $request->estado;//parametro
         $bandeja = $request->bandeja;
         $user_id = $user->id;
         $listado_expedientes = Expediente::listadoExpedientes($user_id, $bandeja);
-        return response()->json($listado_expedientes,200);
+        return response()->json($listado_expedientes, 200);
 
         /*   Datos de prueba
         {
@@ -222,7 +243,7 @@ class HistorialController extends Controller
                          ->join('extractos','extractos.id','=','caratulas.extracto_id')
                          ->join('areas as area_origen','area_origen.id','=','historiales.area_origen_id')
                          ->join('areas as area_destino','area_destino.id','=','historiales.area_destino_id')
-                         ->orderBy('historiales.created_at', 'DESC')
+                         ->orderBy('historiales.id', 'DESC')
                          ->get([
                              'historiales.expediente_id as expediente_id',
                              'expedientes.nro_expediente as nro_expediente',

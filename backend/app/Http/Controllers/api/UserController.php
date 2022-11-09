@@ -235,9 +235,11 @@ class UserController extends Controller
         $usuarios = User::all();
         foreach ($usuarios as $user)
         {
-            if($user->area_id == 13){
+            if($user->area_id == 13)
+            {
                 $user->givePermissionTo('CREAR EXPEDIENTE', 'UNIR EXPEDIENTES');
-                    if($user->id == 36){
+                    if($user->id == 36)
+                    {
                         $user->givePermissionTo('AGREGAR INICIADOR');
                     }
             }
@@ -245,10 +247,10 @@ class UserController extends Controller
             {
                 $user->givePermissionTo('AGREGAR INICIADOR');
             }
-            else if($user->area_id == 14)
+            /*else if($user->area_id == 14)
             {
                 $user->givePermissionTo('AGREGAR CEDULA');
-            }
+            }*/
         }
         return $usuarios;        
     }

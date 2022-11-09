@@ -308,11 +308,13 @@ export default {
 
      AbrirModalDetalle() {
       //datos para mostrar
+      console.log(this.files.length);
       this.datosModal = {
         iniciador: (this.allIniciadores.find( (item) => item.id === this.expe.iniciador_id)).nombre,
         motivo: (this.motivoSinExtracto.find((item) => item.id === this.expe.tipo_exp_id)).descripcion,
         pasea: (this.get_areas_all.find((item) => item.id === this.expe.area_id)).nombre,
-        files_length: this.files.length
+        files_length: this.files.length,
+        archivos: this.files
       };
       this.abrir_modal_preview(true)
      },

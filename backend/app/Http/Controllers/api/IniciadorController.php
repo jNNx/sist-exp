@@ -28,7 +28,7 @@ class IniciadorController extends Controller
         if($request->validated())
         {
             $iniciador = new Iniciador;
-            $iniciador->id_tipo_entidad = $request->tipo_entidad;
+            $iniciador->tipo_entidad_id = $request->tipo_entidad;
             $iniciador->nombre = $request->nombre;
             $iniciador->apellido = $request->apellido;
             $iniciador->dni = $request->dni;

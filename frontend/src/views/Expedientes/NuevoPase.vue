@@ -108,7 +108,7 @@
                         color="amber accent-4"
                         outlined
                         readonly
-                        v-model="fecha"
+                        :value="fechaActual()"
                       ></v-text-field>
                     </v-col>
 
@@ -311,6 +311,13 @@ export default {
       if (this.$refs.form.validate()) {
         this.e1 = 2;
       }
+    },
+
+    fechaActual() {
+      let date = new Date();
+      let fecha = String(date.getDate()).padStart(2, '0') + '/' + String(date.getMonth() + 1).padStart(2, '0') + '/' + date.getFullYear();
+      let hora = String(String(date.getHours()).padStart(2, '0') + ':' + String(date.getMinutes()).padStart(2, '0'));
+      return fecha + ' - ' + hora
     },
   },
 };

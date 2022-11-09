@@ -75,7 +75,7 @@ export default {
   components: {LogoNavbar,DropdownMenu,DropdownMenuPerfil},
 
   data: () => ({
-    bandejas:[ {titulo:'Pendientes', link:'/expedientes-pendientes'},{titulo: 'Expedientes', link:'/expedientes'},{titulo: 'Enviados',link:'/historial-enviados'}, {titulo: 'Mi Área', link:"/expedientes-area"}],
+    bandejas:[ {titulo:'Pendientes', link:'/expedientes-pendientes'},{titulo: 'Expedientes', link:'/all-expedientes'},{titulo: 'Enviados',link:'/historial-enviados'}, {titulo: 'Mi Área', link:"/expedientes-area"}],
     expedientes:[ {titulo: 'Pase', link:'/mis-expedientes'}, {titulo: 'Recuperar', link:'/recuperar'}],
     expedientesMesaEntrada:[ {titulo: 'Nuevo', link:'/nuevo-expediente'},{titulo: 'Pase', link:'/mis-expedientes'}, {titulo: 'Recuperar', link:'/recuperar'}, {titulo: 'Englose', link:'/englose'}, {titulo: 'Desglose', link:'/desglose'}],
     expedientesRelatoriasyVocalias:[ {titulo: 'Pase', link:'/mis-expedientes'}, {titulo: 'Recuperar', link:'/recuperar'}],
