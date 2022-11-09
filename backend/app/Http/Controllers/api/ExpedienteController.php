@@ -525,7 +525,6 @@ class ExpedienteController extends Controller
     /**
      * Método para mostrar información de expedientes con motivo Subsidio y Aporte no reintegrable
      * para  Registraciones(área:6) y Notificaciones(área:14)
-     * Autor: Mariano Flores
      */
     public function expSubsidiosNoReintegrables()
     {
@@ -559,7 +558,6 @@ class ExpedienteController extends Controller
 
     /**
      * Retorna todos los expedientes usando la DB facade
-     * Autor: Mariano Flores
      */
     public function AllExpedientes()
     {
