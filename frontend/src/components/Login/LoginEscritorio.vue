@@ -1,18 +1,20 @@
 <template>
   <div class="full">
     <v-container fill-height fluid>
-      <v-row justify="start">
+      <v-row justify="center">
         <v-card
           color="rgb(255, 255, 255, 0.7)"
-          class="py-5 px-5 ml-lg-16"
+          class="py-10 px-10 ml-lg-16"
           height="w-full"
-          width="30rem"
+          width="40rem"
           style="border-radius: 20px"
           elevation="20"
           align="center"
         >
-          <v-card-text>
-            <img class="mt-4 pa-4" :src="'./img/logo-tribunal.svg'" />
+            <div class="d-flex justify-end  flex-row align-center">
+              <img width="220" height="220" class="pa-2" :src="'./img/expediente.png'" />
+              <div class="titul px-9 Montserrat-SemiBold black--text">Sistema de Expedientes</div>
+            </div>
             <v-divider color="#393B44" class="mt-2"></v-divider>
 
             <form @submit.prevent="onLogin" enctype="multipart/form-data">
@@ -91,7 +93,6 @@
                 Ingresar
               </v-btn>
             </form>
-          </v-card-text>
         </v-card>
       </v-row>
     </v-container>
@@ -150,7 +151,7 @@ export default {
 </script>
 <style>
 .full {
-  background: url(/img/tribunal-desktop.jpg) no-repeat center center fixed;
+  background: url(/img/fondologin.jpg) no-repeat center center fixed;
   -webkit-background-size: cover;
   -moz-background-size: cover;
   -o-background-size: cover;
@@ -159,8 +160,8 @@ export default {
   height: 100vh;
 }
 
-.size {
-  font-size: 15px;
+.titul {
+  font-size: 45px;
   color: #000000;
 }
 </style>

@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h3 class="Montserrat-Bold text-justify">
+    <h3 class="Montserrat-Bold text-center my-6">
      {{ texto }}
     </h3>
   </div>

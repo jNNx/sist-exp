@@ -1,102 +1,55 @@
 <template>
   <div class="pb-16 mb-16">
     <v-row no-gutters justify="start" class="pt-5">
-      <titulo-area-sub :area="get_user.area" class="mb-2"/>
+      <titulo-area-sub :area="get_user.area" class="mb-4"/>
     </v-row>
 
     <v-divider color="#393B44" class="my-4"></v-divider>
 
     <div v-if="get_user.area === 'DPTO. MESA DE ENTRADAS Y SALIDAS'">
-        <v-row no-gutters class="mx-xl-16">
-          <v-col cols="12" lg="6" xs="12" class="my-sm-6">
-            <bandejas/>
-          </v-col>
+      <div class="d-flex justify-space-around">
+        <bandejas/><iniciadores/>
+      </div>
 
-          <v-col cols="12" lg="4" xs="12" class="my-sm-6">
-            <iniciadores/>
-          </v-col>
-
-        </v-row>
-
-        <v-divider color="#393B44" class="my-4"></v-divider>
-
-        <v-row no-gutters class="mx-xl-16">
-          <v-col cols="12" lg="12" xs="12" class="my-sm-6">
-            <expedientes-section />
-          </v-col>
-        </v-row>
+      <v-divider color="#393B44" class="my-8"></v-divider>
+      <div class="d-flex justify-center"><expedientes-section /></div>
     </div>
 
-    <div v-if="get_user.area === 'DIRECCIÓN DE INFORMATICA'">
-      <v-row no-gutters class="mx-xl-16">
-        <v-col cols="12" lg="6" xs="12" class="my-sm-6">
-          <bandejas/>
-        </v-col>
 
-        <v-col cols="12" lg="4" xs="12" class="my-sm-6">
+    <div class="d-flex justify-space-around" v-if="get_user.area === 'DIRECCIÓN DE INFORMATICA'">
+          <bandejas/>
           <iniciadores/>
-        </v-col>
-      </v-row>
 
       <v-divider color="#393B44" class="my-4"></v-divider>
-
-      <v-row no-gutters class="mx-xl-16">
-        <v-col cols="12" lg="12" xs="12" class="my-sm-6">
           <expedientes-section />
-        </v-col>
-      </v-row>
     </div>
+
 
     <div v-if="get_user.area === 'DPTO. NOTIFICACIONES'">
-      <v-row no-gutters class="mx-xl-16">
-        <v-col cols="12" lg="6" xs="12" class="my-sm-6">
-          <bandejas/>
-        </v-col>
+      <div class="d-flex justify-space-around">
+        <bandejas/> <cedula />
+      </div>
 
-        <v-col cols="12" lg="6" xs="12" class="my-sm-6">
-          <expedientes-section />
-        </v-col>
-      </v-row>
-      
       <v-divider color="#393B44" class="my-4"></v-divider>
-
-      <v-row no-gutters class="mx-xl-16">
-        <v-col cols="12" lg="12" xs="12" class="pt-9">
-          <cedula />
-        </v-col>
-      </v-row>
+      <div class="d-flex justify-center"><expedientes-section /></div>
     </div>
 
     <div v-if="get_user.area === 'DIRECCIÓN DE REGISTRACIONES'">
-      <v-row no-gutters class="mx-xl-16">
-        <v-col cols="12" lg="6" xs="12" class="my-sm-6">
-          <bandejas/>
-        </v-col>
-
-        <v-col cols="12" lg="6" xs="12" class="my-sm-6">
-          <expedientes-section />
-        </v-col>
-      </v-row>
+      <div class="d-flex justify-center">
+        <bandejas/> <cedula />
+      </div>
 
       <v-divider color="#393B44" class="my-4"></v-divider>
-
-      <v-row no-gutters class="mx-xl-16">
-        <v-col cols="12" lg="12" xs="12" class="my-sm-6">
-          <cedula/>
-        </v-col>
-      </v-row>
+      <div class="d-flex justify-center"><expedientes-section /></div>
     </div>
 
     <div v-if="!(get_user.area === 'DPTO. MESA DE ENTRADAS Y SALIDAS' || get_user.area === 'DIRECCIÓN DE INFORMATICA' || get_user.area === 'DPTO. NOTIFICACIONES' || get_user.area === 'DIRECCIÓN DE REGISTRACIONES' )">
-      <v-row no-gutters class="mx-xl-16">
-        <v-col cols="12" lg="6" xs="12" class="my-sm-6">
+        <div class="d-flex justify-center">
           <bandejas/>
-        </v-col>
+        </div>
 
-        <v-col cols="12" lg="6" xs="12" class="my-sm-6">
-          <expedientes-section />
-        </v-col>
-      </v-row>
+        <v-divider color="#393B44" class="my-4"></v-divider>
+        <div class="d-flex justify-center"><expedientes-section /></div>
     </div>
 
   </div>

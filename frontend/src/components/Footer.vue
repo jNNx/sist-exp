@@ -1,6 +1,7 @@
 <template>
   <div v-if="$vuetify.breakpoint.mdOnly || $vuetify.breakpoint.lgOnly || $vuetify.breakpoint.xlOnly" >
     <v-footer
+        height="80"
         absolute
         color="#393B44">
       <v-row
@@ -8,39 +9,7 @@
           justify="center"
           class="ma-2"
       >
-        <v-col
-            cols="6"
-            md="6"
-            align="center"
-        ><v-img
-            width="300"
-            height="60"
-            class="hidden-xs-only"
-            src="/img/logo-corrientes-blanco.svg"
-        ></v-img>
-          <v-img
-              width="150"
-              class="hidden-sm-and-up"
-              src="/img/logo-corrientes-blanco.svg"
-          ></v-img>
-        </v-col>
-        <v-col
-            cols="6"
-            md="6"
-            align="center"
-        >
-          <v-img
-              width="300"
-              height="60"
-              class="hidden-xs-only"
-              src="/img/logo-susti-blanco.svg"
-          ></v-img>
-          <v-img
-              width="140"
-              class="hidden-sm-and-up"
-              src="/img/logo-susti-blanco.svg"
-          ></v-img>
-        </v-col>
+       <div class="px-9 Montserrat-SemiBold white--text">2022</div>
       </v-row>
     </v-footer>
   </div>
