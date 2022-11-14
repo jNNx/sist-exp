@@ -3,13 +3,27 @@
     <div class="Montserrat-SemiBold" >
       <v-app-bar class="px-10" height="74" color="#393b44">
         <v-row no-gutters class="justify-space-around">
-          
+
           <v-col cols="12" lg="2" md="1" align="start" align-self="center">
-            <a href="/"><LogoNavbar/></a>
           </v-col>
 
           <v-col cols="12" lg="7" md="10" align="center" align-self="center">
             <div v-if="get_user.area === 'DPTO. MESA DE ENTRADAS Y SALIDAS' && get_user.cargo === 'Administrador Area'" >
+
+                <v-hover v-slot="{ hover }" >
+                  <v-btn
+                      href="/"
+                      v-ripple="false"
+                      color="transparent"
+                      elevation="0"
+                      file
+                      :class="hover ? 'amber--text text--lighten-3' : 'white--text'"
+                      class="px-9 Montserrat-SemiBold white--text"
+                  >
+                    Inicio
+                  </v-btn>
+                </v-hover>
+
               <DropdownMenu titulo="Bandejas" :data-item="bandejas"/>
               <DropdownMenu titulo="Expedientes" :data-item="expedientesMesaEntrada"/>
               <DropdownMenu titulo="Iniciadores" :data-item="iniciadores"/>
@@ -64,7 +78,6 @@
 </template>
 
 <script>
-import LogoNavbar from './LogoNavbar'
 import DropdownMenu from "./DropdownMenu";
 import DropdownMenuPerfil from "./DropdownMenuPerfil";
 import {mapGetters} from "vuex";
@@ -72,12 +85,12 @@ import {mapGetters} from "vuex";
 export default {
   name: 'Navbar',
 
-  components: {LogoNavbar,DropdownMenu,DropdownMenuPerfil},
+  components: {DropdownMenu,DropdownMenuPerfil},
 
   data: () => ({
     bandejas:[ {titulo:'Pendientes', link:'/expedientes-pendientes'},{titulo: 'Expedientes', link:'/all-expedientes'},{titulo: 'Enviados',link:'/historial-enviados'}, {titulo: 'Mi Área', link:"/expedientes-area"}],
     expedientes:[ {titulo: 'Pase', link:'/mis-expedientes'}, {titulo: 'Recuperar', link:'/recuperar'}],
-    expedientesMesaEntrada:[ {titulo: 'Nuevo', link:'/nuevo-expediente'},{titulo: 'Pase', link:'/mis-expedientes'}, {titulo: 'Recuperar', link:'/recuperar'}, {titulo: 'Englose', link:'/englose'}, {titulo: 'Desglose', link:'/desglose'}],
+    expedientesMesaEntrada:[ {titulo: 'Nuevo', link:'/nuevo-expediente'},{titulo: 'Pase', link:'/mis-expedientes'}, {titulo: 'Recuperar', link:'/recuperar'}, {titulo: 'Dar Baja', link:'/dar-baja-expedientes'}],
     expedientesRelatoriasyVocalias:[ {titulo: 'Pase', link:'/mis-expedientes'}, {titulo: 'Recuperar', link:'/recuperar'}],
     iniciadores:[  {titulo: 'Nuevo', link:'/nuevo-iniciador'} , {titulo: 'Ver todos', link:'/iniciadores'}],
     iniciadoresInformatica:[ {titulo: 'Ver todos', link:'/iniciadores'}],
@@ -90,3 +103,9 @@ export default {
 };
 
 </script>
+
+<style scoped>
+.v-btn::before {
+  background-color: transparent;
+}
+</style>
