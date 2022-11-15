@@ -50,7 +50,7 @@ class Expediente extends Model
 
     public function historiales()
     {
-        return $this->hasMany(Historial::class);
+        return $this->hasMany('App\Models\Historial');
     }
 
     public function hijos()
@@ -312,7 +312,7 @@ class Expediente extends Model
                                                                 ->where('estado', 1)
                                                                 ->get();
                         }
-                        if ($bandeja == 2) {                            
+                        if ($bandeja == 3) {                            
                             return $historial_ultimo_movimiento ->where('area_destino_id', $user->area_id)
                                                                 ->where('user_id', $user->id)
                                                                 ->whereIn('estado', [5,3])
@@ -331,25 +331,25 @@ class Expediente extends Model
                                                                 ->orderBy('hora', 'asc')
                                                                 ->get();
                         }
-                        if ($bandeja == 6) {
+                        if ($bandeja == 5) {
                             return $historial_ultimo_movimiento ->where('estado', 6)
                                                                 ->orderBy('prioridad', 'asc')
                                                                 ->orderBy('fecha', 'asc')
                                                                 ->orderBy('hora', 'asc')
                                                                 ->get();
                         }
-                        if ($bandeja == 7) {
+                        if ($bandeja == 6) {
                             return $historial_ultimo_movimiento ->where('area_destino_id', $user->area_id)
-                                                                ->whereIn('estado', [5, 2])
+                                                                ->whereIn('estado', [5,3])
                                                                 ->orderBy('prioridad', 'asc')
                                                                 ->orderBy('fecha', 'asc')
                                                                 ->orderBy('hora', 'asc')
                                                                 ->get();
                         }
-                        if ($bandeja == 8) // bandeja de expedientes del area completa
+                        if ($bandeja == 7) // bandeja de expedientes del area completa
                         {
                             return $historial_ultimo_movimiento ->where('area_destino_id', $user->area_id)
-                                                                ->whereIn('estado', [5, 2])
+                                                                ->whereIn('estado', [5,3])
                                                                 ->orderBy('prioridad', 'asc')
                                                                 ->orderBy('fecha', 'asc')
                                                                 ->orderBy('hora', 'asc')

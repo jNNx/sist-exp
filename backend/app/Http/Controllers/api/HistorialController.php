@@ -112,7 +112,7 @@ class HistorialController extends Controller
     */
     public function updateEstado(Request $request)
     {
-        # 1-Pendiente, 2-Aceptado, 3-Enviado, 4-Eliminado, 5-Recuperado
+        # 1-Pendiente, 2-Aceptado, 3-Enviado, 4-Eliminado, 5-Recuperado, 7-Eliminado
         $user = Auth::user();
         $expediente = Expediente::findOrFail($request->expediente_id);
 
@@ -125,7 +125,7 @@ class HistorialController extends Controller
         $historial->fecha = Carbon::now()->format('Y-m-d');
         $historial->hora = Carbon::now()->format('h:i');
         //$historial->motivo = "Pase aceptado";
-        $historial->estado = $request->estado_expediente;
+        $historial->estado = $request->estado;
         $expediente->estado_expediente_id = $request->estado_expediente;
 
         // Si el estado al que cambia es 2 (mis expediente), Actualizo el area actual del expediente.
@@ -137,18 +137,20 @@ class HistorialController extends Controller
                 $historial->motivo = "Pase aceptado";
                 $expediente->update();
                 break;
-            case "4":
+            case "5":
+                    $historial->motivo = "Pase recuperado";
+                    $historial->estado = 5;
+                    $historial->fojas = $expediente->fojas_aux;
+                    $expediente->estado_expediente_id = 5;
+                    $expediente->fojas = $expediente->fojas_aux;
+                    $expediente->update();
+                break;
+            case "7":
                 $expediente->area_actual_id = $user->area_id;
                 $expediente->fojas_aux = $expediente->fojas;
-                $expediente->estado_expediente = 4;
+                $expediente->estado_expediente_id = 7;
+                $historial->estado = 7;
                 $historial->motivo = "Expediente eliminado";
-                $expediente->update();
-            case "5":
-                $historial->motivo = "Pase recuperado";
-                $historial->estado = 5;
-                $historial->fojas = $expediente->fojas_aux;
-                $expediente->estado_expediente_id = 5;
-                $expediente->fojas = $expediente->fojas_aux;
                 $expediente->update();
                 break;
         }

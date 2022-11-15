@@ -15,7 +15,7 @@ export default {
   components: {TablaExpedientesBaja, Titulo},
   data() {
     return {
-      estado: 1,
+      estado: 4,
       cargando:true,
     }
   },
