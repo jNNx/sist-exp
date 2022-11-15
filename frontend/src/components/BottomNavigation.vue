@@ -55,7 +55,7 @@ export default {
     expedientes:[{titulo: 'Pase', icono:'mdi-file-send-outline', link:"/mis-expedientes"},{titulo: 'Recuperar', icono:'mdi-arrow-u-left-top', link:"/recuperar"}],
     iniciadores:[  {titulo: 'Nuevo', icono:'mdi-account-plus-outline', link:"/nuevo-iniciador"},{titulo: 'Ver Todos', icono:'mdi-account-group-outline', link:"/iniciadores"}],
     iniciadoresInformatica:[ {titulo: 'Ver Todos', icono:'mdi-account-group-outline', link:"/iniciadores"}],
-    expedientesMesaEntrada:[ {titulo: 'Nuevo', icono:'mdi-text-box-plus-outline', link:'/nuevo-expediente'},{titulo: 'Pase', icono:'mdi-file-send-outline', link:'/mis-expedientes'}, {titulo: 'Recuperar', icono:'mdi-arrow-u-left-top', link:'/recuperar'}, {titulo: 'Englose', icono:'mdi-text-box-plus-outline', link:'/englose'},  {titulo: 'Desglose', icono:'mdi-file-percent-outline', link:'/desglose'}],
+    expedientesMesaEntrada:[ {titulo: 'Nuevo', icono:'mdi-text-box-plus-outline', link:'/nuevo-expediente'},{titulo: 'Pase', icono:'mdi-file-send-outline', link:'/mis-expedientes'}, {titulo: 'Recuperar', icono:'mdi-arrow-u-left-top', link:'/recuperar'}],
     expedientesRelatoriasyVocalias:[ {titulo: 'Pase', icono:'mdi-file-send-outline', link:'/mis-expedientes'},  {titulo: 'Recuperar', icono:'mdi-arrow-u-left-top', link:'/recuperar'}],
     expedienteNotificaciones:[{titulo: 'Pase', icono:'mdi-file-send-outline', link:'/mis-expedientes'}, {titulo: 'Recuperar', icono:'mdi-arrow-u-left-top', link:'/recuperar'}],
     cedulas:[{titulo: 'Listado', icono:'mdi-card-account-details-outline', link:'/cedula'}]

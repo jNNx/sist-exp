@@ -339,18 +339,18 @@ class UserSeeder extends Seeder
         (114,23,2,20230760862,NULL,NULL,NULL,NULL,NULL,'2021-11-09 13:20:22',NULL),
         (115,23,2,27325168272,NULL,NULL,NULL,NULL,NULL,'2021-11-09 13:20:22',NULL)");*/
         //Persona
-        DB::insert("INSERT INTO sistexpedientes.personas (dni, nombre, apellido, telefono, email, direccion, created_at, updated_at) VALUES
+        DB::insert("INSERT INTO tribunaldecuentas.personas (dni, nombre, apellido, telefono, email, direccion, created_at, updated_at) VALUES
         (00133700, 'Juan', 'Romero ', NULL, NULL, NULL, NULL, NULL),
         (00133702, 'Julio', 'Escobar ', NULL, NULL, NULL, NULL, NULL)
         ");
         //User
-        DB::insert("INSERT INTO sistexpedientes.users (persona_id, area_id, tipo_user_id, cuil, remember_token, created_at, updated_at, deleted_at) VALUES
+        DB::insert("INSERT INTO tribunaldecuentas.users (persona_id, area_id, tipo_user_id, cuil, remember_token, created_at, updated_at, deleted_at) VALUES
         (1, 13, 1, 27001337001, NULL, '2022-07-05 13:37:00', '2022-07-05 13:37:00', NULL),
         (2, 15, 1, 27001337002, NULL, '2022-07-05 13:37:00', '2022-07-05 13:37:00', NULL)
         ");
 
         $users = User::all();
-        foreach ($users as $user) 
+        foreach ($users as $user)
         {
             $user->password=  Hash::make($user->cuil);
             $user->update();

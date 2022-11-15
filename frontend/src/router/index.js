@@ -32,6 +32,7 @@ import middlewarePipeline from "./middlewarePipeline";
 import nuevo_iniciador from "../middleware/nuevo_iniciador"
 import cedula from "../middleware/cedula"
 import Area from "../views/Expedientes/Area"
+import DarBaja from "@/views/Expedientes/DarBaja";
 
 Vue.use(VueRouter)
 
@@ -52,6 +53,12 @@ const routes = [
         name: 'MisEnviados',
         component: MisEnviados,
         meta: { title: 'Historial Enviados', middleware: [auth]}
+      },
+      {
+        path: '/dar-baja-expedientes',
+        name: 'DarBaja',
+        component: DarBaja,
+        meta: { title: 'Expedientes', middleware: [auth]}
       },
       {
         path: '/englose',
