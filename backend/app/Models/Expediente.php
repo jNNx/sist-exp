@@ -179,7 +179,7 @@ class Expediente extends Model
                                  'areas.descripcion as area_actual',
                                  'areaOrigen.descripcion as area_origen',
                                  'expedientes.archivos as archivo'
-                                 )
+                                 )->where('expedientes.estado_expediente_id', '<>', 7)
                         ->joinSub($area_origen, 'areaOrigen', function($join)
                         {
                             $join->on('expedientes.id', '=', 'areaOrigen.expediente_id');
