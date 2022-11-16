@@ -216,9 +216,6 @@ export default {
       this.showCaratula = true
     },
 
-    ...mapActions([
-      'historial_expediente',
-    ]),
   }
 }
 </script>

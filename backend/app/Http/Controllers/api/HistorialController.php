@@ -243,7 +243,7 @@ class HistorialController extends Controller
     public function historialExpediente(Request $request)
     {
         $historiales = DB::table('historiales')
-                         ->where('historiales.expediente_id',$request->id)
+                         ->where('historiales.expediente_id',$request->expediente_id)
                          ->join('expedientes','expedientes.id','=','historiales.expediente_id')
                          ->join('users','users.id','=','historiales.user_id')
                          ->join('personas','personas.id','=','users.persona_id')
