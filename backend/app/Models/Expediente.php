@@ -179,7 +179,7 @@ class Expediente extends Model
                                  'areas.descripcion as area_actual',
                                  'areaOrigen.descripcion as area_origen',
                                  'expedientes.archivos as archivo'
-                                 )
+                                 )->where('expedientes.estado_expediente_id', '<>', 7)
                         ->joinSub($area_origen, 'areaOrigen', function($join)
                         {
                             $join->on('expedientes.id', '=', 'areaOrigen.expediente_id');
@@ -350,7 +350,7 @@ class Expediente extends Model
                         if ($bandeja == 7) // bandeja de expedientes del area completa
                         {
                             return $historial_ultimo_movimiento ->where('area_destino_id', $user->area_id)
-                                                                ->whereIn('estado', 7)
+                                                                ->whereIn('estado', [5,3])
                                                                 ->orderBy('prioridad', 'asc')
                                                                 ->orderBy('fecha', 'asc')
                                                                 ->orderBy('hora', 'asc')
