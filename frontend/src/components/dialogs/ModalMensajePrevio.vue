@@ -89,7 +89,6 @@
           </div>
         </div>
 
-      {{this.dato}}  
       <v-row no-gutters justify="center" class="mt-6">
         <v-col cols="12" sm="6" md="6" lg="6" class="py-6 px-sm-2">
           <v-btn @click="storeExpe" class="pa-5 color Montserrat-SemiBold"

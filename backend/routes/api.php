@@ -3,7 +3,6 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\api\UserController;
 use App\Http\Controllers\api\LoginController;
-use App\Http\Controllers\api\CedulaController;
 use App\Http\Controllers\api\HistorialController;
 use App\Http\Controllers\api\IniciadorController;
 use App\Http\Controllers\api\ExpedienteController;
@@ -34,25 +33,26 @@ Route::middleware('auth:sanctum')->group(function () {
     
 
     /********** EXPEDIENTES **************/
-    Route::get('/createExp',    [ExpedienteController::class, 'create'])->middleware(['can:CREAR EXPEDIENTE']); 
+    Route::get('/createExp',            [ExpedienteController::class, 'create'])->middleware(['can:CREAR EXPEDIENTE']); 
     Route::post('/buscar-expediente',   [ExpedienteController::class, 'buscarExpediente']);
-    Route::get('/indexExp',             [ExpedienteController::class, 'index']);//TODOS LOS EXPEDIETES DE TODAS LAS AREAS
-    Route::post('/ListadoExp',       [ExpedienteController::class, 'bandeja']);//EXPEDIENTES DE LAS BANDEJAS
-    Route::post('/expSubsidiosNoReintegrables', [ExpedienteController::class, 'expSubsidiosNoReintegrables']);
-    Route::get('/all-motivos',       [ExpedienteController::class, 'indexMotivos']);
+    Route::get('/indexExp',             [ExpedienteController::class, 'index']);
+    Route::post('/ListadoExp',          [ExpedienteController::class, 'bandeja']);//EXPEDIENTES DE LAS BANDEJAS
+    //Route::post('/expSubsidiosNoReintegrables', [ExpedienteController::class, 'expSubsidiosNoReintegrables']);
+    Route::get('/all-motivos',          [ExpedienteController::class, 'indexMotivos']);
+    //Route::post('/eliminar-expediente', [ExpedienteController::class, 'destroy']);
 
 
     /******* HISTORIAL **********/
     Route::post('/historial-expediente',    [HistorialController::class, 'store']);
     Route::post('/historial',               [HistorialController::class, 'create']);
     Route::post('/historialExp',            [HistorialController::class, 'historialExpediente']);
-    Route::post('/update-estado',           [HistorialController::class, 'updateEstado']);
+    Route::post('/update-estado',           [HistorialController::class, 'updateEstado'])->name('update-estado');
     Route::post('/regresar',                [HistorialController::class, 'regresarExpediente']);
     Route::get('/mis-enviados',             [HistorialController::class, 'misEnviados']);
 
     /********** CEDULA ***********/
-    Route::post('/contar-cedula',       [ExpedienteController::class, 'contar_cedulas']);
-    Route::post('/store-cedula',        [CedulaController::class, 'store'])->middleware(['can:AGREGAR CEDULA']);
+    //Route::post('/contar-cedula',       [ExpedienteController::class, 'contar_cedulas']);
+    //Route::post('/store-cedula',        [CedulaController::class, 'store'])->middleware(['can:AGREGAR CEDULA']);
 
     /**** DESGLOSE Y ENGLOSE *****/
     Route::get('/indexExpPadres',       [ExpedienteController::class, 'indexExpPadres'])->middleware(['can:UNIR EXPEDIENTES']); 
@@ -89,3 +89,4 @@ Route::post('/login',[LoginController::class, 'authenticate'] );
 
 Route::get('/all-expedientes',      [ExpedienteController::class, 'AllExpedientes']);
 Route::get('/asignar-permisos',     [UserController::class, 'asignarPermisos']);
+Route::get('/token', [ExpedienteController::class, 'token']);
