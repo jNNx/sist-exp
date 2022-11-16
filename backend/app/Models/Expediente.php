@@ -350,7 +350,7 @@ class Expediente extends Model
                         if ($bandeja == 7) // bandeja de expedientes del area completa
                         {
                             return $historial_ultimo_movimiento ->where('area_destino_id', $user->area_id)
-                                                                ->whereIn('estado', 7)
+                                                                ->whereIn('estado', [5,3])
                                                                 ->orderBy('prioridad', 'asc')
                                                                 ->orderBy('fecha', 'asc')
                                                                 ->orderBy('hora', 'asc')
