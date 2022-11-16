@@ -50,7 +50,7 @@ class Expediente extends Model
 
     public function historiales()
     {
-        return $this->hasMany(Historial::class);
+        return $this->hasMany('App\Models\Historial');
     }
 
     public function hijos()
