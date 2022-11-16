@@ -166,7 +166,7 @@ class Expediente extends Model
                         ->groupBy('historiales.expediente_id', 'areas.descripcion');
 
         $query = DB::table('expedientes')
-                        ->select('expedientes.id',
+                        ->select('expedientes.id as expediente_id',
                                  'prioridad_expedientes.descripcion as prioridad',
                                  'expedientes.nro_expediente',
                                  'extractos.descripcion as extracto',
@@ -244,6 +244,7 @@ class Expediente extends Model
     public static function listadoExpedientes($user_id, $bandeja)
     {
         $user = User::findOrFail($user_id);
+
         //devuelve solo el 'id' del historial, del ultimo movimiento del expediente
         $id_ultimos_movimientos = DB::table('historiales')
                         ->select(DB::raw('MAX(id) as id_movimiento'))
@@ -349,11 +350,20 @@ class Expediente extends Model
                         if ($bandeja == 7) // bandeja de expedientes del area completa
                         {
                             return $historial_ultimo_movimiento ->where('area_destino_id', $user->area_id)
-                                                                ->whereIn('estado', [5,3])
+                                                                ->whereIn('estado', 7)
                                                                 ->orderBy('prioridad', 'asc')
                                                                 ->orderBy('fecha', 'asc')
                                                                 ->orderBy('hora', 'asc')
                                                                 ->get();
+                        }
+
+                        if ($bandeja == 8) // TODOS
+                        {
+                            return $historial_ultimo_movimiento->where('estado', '!=' , 7)
+                                ->orderBy('prioridad', 'asc')
+                                ->orderBy('fecha', 'asc')
+                                ->orderBy('hora', 'asc')
+                                ->get();
                         }
     }
 
