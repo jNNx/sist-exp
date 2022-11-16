@@ -166,7 +166,7 @@ class Expediente extends Model
                         ->groupBy('historiales.expediente_id', 'areas.descripcion');
 
         $query = DB::table('expedientes')
-                        ->select('expedientes.id',
+                        ->select('expedientes.id as expediente_id',
                                  'prioridad_expedientes.descripcion as prioridad',
                                  'expedientes.nro_expediente',
                                  'extractos.descripcion as extracto',
@@ -244,6 +244,7 @@ class Expediente extends Model
     public static function listadoExpedientes($user_id, $bandeja)
     {
         $user = User::findOrFail($user_id);
+
         //devuelve solo el 'id' del historial, del ultimo movimiento del expediente
         $id_ultimos_movimientos = DB::table('historiales')
                         ->select(DB::raw('MAX(id) as id_movimiento'))
@@ -257,7 +258,7 @@ class Expediente extends Model
         $areas_d = DB::table('areas')
                         ->select('id as area_id_destino', 'descripcion as area_descripcion_destino');
 
-   
+
         //recupera el registro completo del historial del último movimiento del expediente
         $historial_ultimo_movimiento = DB::table('historiales')
                         ->select('expedientes.id as expediente_id',
@@ -312,7 +313,7 @@ class Expediente extends Model
                                                                 ->where('estado', 1)
                                                                 ->get();
                         }
-                        if ($bandeja == 3) {                            
+                        if ($bandeja == 3) {
                             return $historial_ultimo_movimiento ->where('area_destino_id', $user->area_id)
                                                                 ->where('user_id', $user->id)
                                                                 ->whereIn('estado', [5,3])
@@ -320,7 +321,7 @@ class Expediente extends Model
                                                                 ->orderBy('fecha', 'asc')
                                                                 ->orderBy('hora', 'asc')
                                                                 ->get();
-                            
+
                         }
                         if ($bandeja == 4) {
                             return $historial_ultimo_movimiento ->where('area_origen_id', $user->area_id)
@@ -349,11 +350,20 @@ class Expediente extends Model
                         if ($bandeja == 7) // bandeja de expedientes del area completa
                         {
                             return $historial_ultimo_movimiento ->where('area_destino_id', $user->area_id)
-                                                                ->whereIn('estado', [5,3])
+                                                                ->whereIn('estado', 7)
                                                                 ->orderBy('prioridad', 'asc')
                                                                 ->orderBy('fecha', 'asc')
                                                                 ->orderBy('hora', 'asc')
                                                                 ->get();
+                        }
+
+                        if ($bandeja == 8) // TODOS
+                        {
+                            return $historial_ultimo_movimiento->where('estado', '!=' , 7)
+                                ->orderBy('prioridad', 'asc')
+                                ->orderBy('fecha', 'asc')
+                                ->orderBy('hora', 'asc')
+                                ->get();
                         }
     }
 
@@ -384,115 +394,34 @@ class Expediente extends Model
     /*
     * Busca por nro de la tabla pagos
     */
-    public static function buscarPor($valor,$busqueda)
+    public static function buscarPor($valor)
     {
-        $lista_expedientes = Collect([]);
-        switch ($busqueda)
-        {
-            case "1": //Busca por nro_expediente
-                $expediente = Expediente::where('nro_expediente', $valor)->get()->first();//Deberia retornar solo un expediente
-                break;
+        if ($expediente = Expediente::where('nro_expediente', $valor)->get()->first()){
+            $expedientes = DB::table('caratulas')
+                ->where('caratulas.expediente_id',$expediente->id)
+                ->join('expedientes','expedientes.id','caratulas.expediente_id')
+                ->join('iniciadores','iniciadores.id','caratulas.iniciador_id')
+                ->join('extractos','extractos.id','caratulas.extracto_id')
+                ->join('areas','expedientes.area_actual_id','areas.id')
+                //->where('expedientes.nro_expediente',null)
+                ->orderBy('expedientes.created_at', 'DESC')
+                ->get([
+                    'expedientes.id as id',
+                    'expedientes.nro_expediente as nro_expediente',
+                    DB::raw("DATE_FORMAT(expedientes.created_at, '%d-%m-%y %h:%i:%s') as fecha"),
+                    //DB::raw("CONCAT(iniciadores.nombre,', ',iniciadores.apellido) as iniciadores"),
+                    'iniciadores.nombre as iniciador',
+                    'iniciadores.apellido as apellido',
+                    'iniciadores.cuit as cuit',
+                    'iniciadores.cuil as cuil',
+                    'extractos.descripcion as extracto',
+                    'areas.descripcion as area_actual'
+                ]);
+        }else{
+            $expedientes = [];
+        };
 
-            case "2": //Busca por cuit iniciador
-                $iniciador_id = Iniciador::where('cuit',$valor)->orWhere('cuil',$valor)->first()->id ?? null;//->first()->id;
-
-                //return $iniciador_id;
-                if ($iniciador_id != null)
-                {
-                    //Recorro las caratulas del iniciador para obtener los expedientes
-                    /*foreach ($iniciador->caratulas as $caratula)
-                    {
-                        $lista_expedientes->push($caratula->expediente->getDatos());
-                    }*/
-
-                    $expedientes = DB::table('caratulas')
-                                     ->where('caratulas.iniciador_id',$iniciador_id)
-                                     ->join('expedientes','expedientes.id','caratulas.expediente_id')
-                                     ->join('iniciadores','iniciadores.id','caratulas.iniciador_id')
-                                     ->join('extractos','extractos.id','caratulas.extracto_id')
-                                     ->join('areas','expedientes.area_actual_id','areas.id')
-                                     //->where('expedientes.nro_expediente',null)
-                                     ->orderBy('expedientes.created_at', 'DESC')
-                                     ->get([
-                                         'expedientes.id as id',
-                                         'expedientes.nro_expediente as nro_expediente',
-                                         DB::raw("DATE_FORMAT(expedientes.created_at, '%d-%m-%y %h:%i:%s') as fecha"),
-                                         //DB::raw("CONCAT(iniciadores.nombre,', ',iniciadores.apellido) as iniciadores"),
-                                         'iniciadores.nombre as iniciador',
-                                         'iniciadores.apellido as apellido',
-                                         'iniciadores.cuit as cuit',
-                                         'iniciadores.cuil as cuil',
-                                         'extractos.descripcion as extracto',
-                                         'areas.descripcion as area_actual'
-                                     ]);
-
-                                     $array = Collect($expedientes,
-                                        //"expediente_id"   => $expedientes->expediente_id,
-                                        //"nro_expediente" => $this->nroExpediente($this->caratula->iniciador->prefijo, date("d-m",strtotime($this->fecha)),date("Y",strtotime($this->fecha))),
-                                        //"nro_expediente"  =>$expedientess->nro_expediente,
-                                        //"fecha"           => date("d-m-Y", strtotime($this->fecha)),
-                                        //"iniciador"       => $expedientes->caratula->iniciador->nombre,
-                                        //"cuit"            => $expedientes->caratula->iniciador->cuit,
-                                        //"extracto"        => $expedientes->caratula->extracto->descripcion,
-                                        //"area_actual"     => $expedientes->area->descripcion,
-                                        //"cantidad_cedulas"=> $expedientes->cedulas->count()
-                                     );
-                   
-                 return $array;
-                   // return response()->json($expedientes->toArray(), 200);
-                }
-                break;
-                /*case "3"://Busca por nro_cheque o nro_transaccion
-                $pago = Pago::where('nro', $valor)->get()->first();//Deberia retornar solo un expediente
-                if ($pago != null)
-                {
-                    $lista_expedientes->push($pago->expediente->getDatos());
-                }
-                break;*/
-            case "4"://Busca por id de iniciador
-                $iniciador = Iniciador::findOrFail($valor);
-                //Recorro las caratulas del iniciador para obtener los expedientes
-                foreach ($iniciador->caratulas as $caratula)
-                {
-                    $lista_expedientes->push($caratula->expediente->getDatos());
-                }
-                break;
-            case "5": //Busca por nro_expediente_ext
-                $expedienteExt = Expediente::where('expediente_id',null)->where('nro_expediente_ext', $valor)->get()->values();
-                if ($expedienteExt != null)
-                {
-                    foreach ($expedienteExt as $expediente)
-                    {
-                        $lista_expedientes->push($expediente->getDatos());
-                    }
-                }
-                break;
-
-                case "6": //Busca por Norma Legal
-                    $valor = 'NORMA LEGAL: '.$valor;
-                    /*Hice asi porque de esta forma: $lista_expedientes = $lista_expedientes->where('extracto','LIKE',"%$valor%");
-                    no me funcionaba la parte del: 'LIKE',"%$valor%"*/
-                    $consulta = DB::table('expedientes')->join('caratulas', 'expedientes.id', '=', 'caratulas.expediente_id')
-                                            ->join('extractos', 'caratulas.extracto_id', '=', 'extractos.id')
-                                            ->select('expedientes.*', 'caratulas.expediente_id', 'extractos.descripcion')
-                                            ->where('tipo_expediente', 3)
-                                            ->where('descripcion','LIKE',"%$valor%")
-                                            ->get();
-                    foreach ($consulta as $item) {
-                        $expediente = Expediente::FindOrFail($item->id);
-                        $lista_expedientes->push($expediente->getDatos());
-
-                    }
-                    break;
-
-                    /*case "7": //Busca por numero de Cedula
-                        $ced = Cedula::where('descripcion',$valor)->first();
-                        $exp = Expediente::FindOrFail($ced->expediente_id);
-                        $lista_expedientes->push($exp->getDatos());
-                        break;*/
-
-        }
-        return $lista_expedientes;
+        return $expedientes;
     }
 
     public static function listadoExpedientesSubsidioAporteNR()

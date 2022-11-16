@@ -1,118 +1,35 @@
 <template>
-  <v-dialog persistent v-model="show" width="auto" content-class="round">
-    <div v-if="this.get_encontrado == false">
+  <v-dialog persistent v-model="show" width="900" content-class="round">
+    <div v-if="this.get_encontrado === false">
+
       <v-card class="px-7 pt-1 pb-6">
-        <v-row class="my-5">
-          <v-col>
-            <h2 class="Montserrat-Bold text-justify textRadioTitlte">
-              Consultar Expediente por:
-            </h2>
-          </v-col>
-          <v-col cols="2" align="right">
-            <v-btn @click="close" icon elevation="0" color="grey lighten-2">
-              <v-icon left large color="#393B44"> mdi-close-thick </v-icon>
-            </v-btn>
-          </v-col>
-        </v-row>
+
+        <div class="d-flex justify-space-between mb-6">
+          <h2 class="Montserrat-Bold text-justify textRadioTitlte">
+            Consultar Expediente por N° Expediente:
+          </h2>
+
+          <v-btn @click="close" icon elevation="0" color="grey lighten-2">
+            <v-icon left large color="#393B44"> mdi-close-thick </v-icon>
+          </v-btn>
+        </div>
+
         <v-divider color="#393B44" class="mt-2"></v-divider>
 
-        <v-btn-toggle
-          rounded
-          v-model="busqueda.buscar_por"
-          group
-          @change="showBuscar = true"
-        >
           <v-form ref="form" v-model="valid">
-            <v-row class="my-4 py-2" justify="center">
-              <v-col col="12">
-                <v-btn value="1" class="mx-4 my-4 pa-8 textRadio sizeBtn">
-                  <v-icon large color="#FDBC3F" class="pr-2 sizeIcon">
-                    mdi-text-box
-                  </v-icon>
-                  <p class="pt-4 text-capitalize">N° Expediente</p>
-                </v-btn>
+            <v-text-field class="Montserrat-Regular text-justify" color="amber accent-4" v-model="busqueda.valor" :rules="nameRules" outlined></v-text-field>
 
-                <v-btn value="3" class="mx-4 my-4 pa-8 textRadio">
-                  <v-icon class="pr-2 sizeIcon" large color="#FDBC3F">
-                    mdi-cash
-                  </v-icon>
-                  <p class="pt-4 text-capitalize">N° Cheque/Transferencia</p>
-                </v-btn>
-
-                <v-btn value="2" class="mx-4 my-4 pa-8 textRadio">
-                  <v-icon class="pr-2 sizeIcon" large color="#FDBC3F">
-                    mdi-account
-                  </v-icon>
-                  <p class="pt-4 text-capitalize">CUIL/CUIT Iniciador</p>
-                </v-btn>
-
-                <v-btn
-                  v-if="
-                    get_user.area == 'DPTO. NOTIFICACIONES' ||
-                    get_user.area == 'DIRECCIÓN DE REGISTRACIONES'
-                  "
-                  file
-                  value="6"
-                  class="mx-4 my-4 pa-8 textRadio"
-                >
-                  <v-icon class="pr-2 sizeIcon" large color="#FDBC3F">
-                    mdi-clipboard-text-search
-                  </v-icon>
-                  <p class="pt-4 text-capitalize">Norma Legal</p>
-                </v-btn>
-
-                <v-btn value="7" class="mx-4 my-4 pa-8 textRadio">
-                  <v-icon class="pr-2 sizeIcon" large color="#FDBC3F">
-                    mdi-card-account-details
-                  </v-icon>
-                  <p class="pt-4 text-capitalize">N° Cédula</p>
-                </v-btn>
-
-                <v-btn value="5" class="mx-4 my-4 pa-8 textRadio">
-                  <v-icon class="pr-2 sizeIcon" large color="#FDBC3F">
-                    mdi-sticker-text
-                  </v-icon>
-                  <p class="pt-4 text-capitalize">N° SIIF</p>
-                </v-btn>
-              </v-col>
-            </v-row>
-
-            <v-row>
-              <v-col cols="11" lg="12" md="12" sm="12" align="center">
-                <div v-if="showBuscar" class="pt-2">
-                  <div class="Montserrat-SemiBold mt-2 mb-1 py-2 textRadio">
-                    Ingrese el valor:
-                  </div>
-
-                  <v-text-field
-                    class="Montserrat-Regular text-justify"
-                    color="amber accent-4"
-                    v-model="busqueda.valor"
-                    :rules="nameRules"
-                    outlined
-                  ></v-text-field>
-
-                  <v-row justify="center" class="pb-6">
-                    <v-btn
-                      :disabled="!valid"
-                      @click="validate"
-                      class="pa-5 color Montserrat-SemiBold"
-                      height="45"
-                      color="#FACD89"
-                    >
+                    <v-btn :disabled="!valid" @click="validate" class="pa-5 color Montserrat-SemiBold" height="45" color="#FACD89">
                       <v-icon class="pr-4"> mdi-magnify </v-icon>
                       Buscar
                     </v-btn>
-                  </v-row>
-                </div>
-              </v-col>
-            </v-row>
           </v-form>
-        </v-btn-toggle>
+
       </v-card>
     </div>
 
     <div v-if="this.get_encontrado">
+
       <v-card class="px-7 pt-1 pb-6">
         <v-row class="mt-5">
           <v-col cols="10">
@@ -299,7 +216,7 @@ export default {
       showBuscar: false,
       opcion_elegida: "",
       busqueda: {
-        buscar_por: "",
+        buscar_por: 1,
         valor: "",
       },
       states: [{ name: "Con resultados" }, { name: "Sin resultados" }],

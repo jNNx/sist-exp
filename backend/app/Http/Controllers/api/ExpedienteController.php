@@ -134,7 +134,7 @@ class ExpedienteController extends Controller
             //$historial->motivo = $request->observacion; TODO
             $historial->motivo = "Pase al área: ".Area::find( $historial->area_destino_id)->descripcion. ".";
             $historial->observacion = null;
-            $historial->estado = 2;//Enviado
+            $historial->estado = 1;//Enviado
             $nano = time_nanosleep(0, 500000000);
             $historial->save();
             $estado_actual = Area::findOrFail($request->area_id);
@@ -358,9 +358,7 @@ class ExpedienteController extends Controller
     */
     public function buscarExpediente(Request $request)
     {
-        $buscar_por = $request->buscar_por;
-        $valor = $request->valor;
-        $listado_expedientes = Expediente::buscarPor($valor, $buscar_por);
+        $listado_expedientes = Expediente::buscarPor($request->valor);
         return response()->json($listado_expedientes, 200);
     }
 

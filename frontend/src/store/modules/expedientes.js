@@ -44,7 +44,6 @@ const actions = {
         axios.get(process.env.VUE_APP_API_URL+ '/api/all-expedientes')
             .then(response => {
                 commit('set_todos_expedientes', response.data)
-                commit('set_todos_expedientes', response.data)
                 commit('set_finalizado', false)
             })
     },
@@ -69,7 +68,7 @@ const actions = {
         })
     },
 
-    consultarExpediente ({ commit }, busqueda) {
+    consultarExpediente ({commit}, busqueda) {
         axios.post(process.env.VUE_APP_API_URL+ '/api/buscar-expediente', busqueda)
             .then(response => {
                 commit('set_resultados', response.data)

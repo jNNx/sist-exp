@@ -155,7 +155,9 @@ export default {
     ...mapActions(['historial_expediente', 'index_filtros', 'cambiarEstado']),
 
     dar_baja_expediente(item){
+      item.estado = 7
       item.estado_expediente = 7
+      item.bandeja = 8
       this.cambiarEstado(item)
     },
 

@@ -97,8 +97,7 @@
                 class="textHereSmall Montserrat-Regular"
                 @click="getArchiv()"
               >
-                Descargar</v-chip
-              >
+                Descargar</v-chip>
             </div>
             <div
               v-else
