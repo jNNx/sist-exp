@@ -34,6 +34,7 @@ const actions = {
     historial_expediente ({commit}, expediente) {
         axios.post(process.env.VUE_APP_API_URL+ '/api/historialExp', expediente)
             .then(response => {
+                console.log(response.data)
                 commit('set_historial', response.data)
                 router.push('/ver-historiales');
             })
