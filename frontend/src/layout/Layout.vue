@@ -20,10 +20,6 @@
             <alert-pendiente :cantidad="get_cantPendientes"/>
           </div>
 
-          <div v-if="(get_user.area === 'DIRECCIÓN DE REGISTRACIONES') && (get_subsidioAporteNR === 1)">
-            <snackbar class="mb-8"/>
-          </div>
-
           <router-view/>
         </v-main>
         <Footer/>
@@ -39,12 +35,11 @@ import NavbarMobile from "../components/NavbarMobile";
 import AlertPendiente from  "../components/AlertPendiente"
 import Overlay from "../components/Overlay";
 import ModalRecargar from "../components/dialogs/ModalRecargar";
-import Snackbar from "../components/Snackbars"
 
 import {mapActions, mapGetters} from "vuex";
 
 export default {
-  components: { Footer, Navbar, NavbarMobile, AlertPendiente, Overlay, ModalRecargar, Snackbar},
+  components: { Footer, Navbar, NavbarMobile, AlertPendiente, Overlay, ModalRecargar},
 
   data: () => ({
     value: 'recent',

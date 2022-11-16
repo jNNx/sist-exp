@@ -80,7 +80,7 @@
       </template>
 
       <template v-slot:item.action2="{ item }">
-        <v-btn @click="historial_expediente(item)" fab small color="#FACD89" depressed title="Haga click para ver el historial del expediente">
+        <v-btn @click="dar_baja_expediente(item)" fab small color="#FACD89" depressed title="Haga click para ver el historial del expediente">
           <v-icon> mdi-delete </v-icon>
         </v-btn>
       </template>
@@ -152,7 +152,16 @@ export default {
 
   methods: {
 
-    ...mapActions(['historial_expediente', 'index_filtros']),
+    ...mapActions(['historial_expediente', 'index_filtros', 'cambiarEstado']),
+
+    dar_baja_expediente(item){
+      item.estado_expediente = 7
+      item.estado = 3;
+      item.bandeja = 3;
+      this.cambiarEstado(item)
+    },
+
+
 
     nroExpedienteFilter(value) {
       // If this filter has no value we just skip the entire filter.

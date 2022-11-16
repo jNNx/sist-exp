@@ -537,9 +537,7 @@ class ExpedienteController extends Controller
     */
     public function buscarExpediente(Request $request)
     {
-        $buscar_por = $request->buscar_por;
-        $valor = $request->valor;
-        $listado_expedientes = Expediente::buscarPor($valor, $buscar_por);
+        $listado_expedientes = Expediente::buscarPor($request->valor);
         return response()->json($listado_expedientes, 200);
     }
 
