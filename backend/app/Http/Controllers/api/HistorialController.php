@@ -131,7 +131,7 @@ class HistorialController extends Controller
         // Si el estado al que cambia es 2 (mis expediente), Actualizo el area actual del expediente.
         switch($request->estado_expediente)
         {
-            case "2":
+            case "3":
                 $expediente->area_actual_id = $user->area_id;
                 $expediente->fojas_aux = $expediente->fojas;
                 $historial->motivo = "Pase aceptado";
